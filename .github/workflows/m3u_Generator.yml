@@ -21,6 +21,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+      - name: deno
+        run: |
+          wget https://github.com/denoland/deno/releases/latest/download/deno-x86_64-unknown-linux-gnu.zip
+          unzip deno-x86_64-unknown-linux-gnu.zip
+          chmod +x ./deno
+          ls
       - name: yt
         run: |
           rm -rf yt-dlp
@@ -45,7 +51,7 @@ jobs:
       - name: c
         run: echo '#EXT-X-STREAM-INF:RESOLUTION=1280x720' >> youtube.m3u8
       - name: Main
-        run: ./yt-dlp -g 'https://www.youtube.com/@euronewshu/live' --cookies cookies.firefox-private.txt >> youtube.m3u8
+        run: ./yt-dlp -g 'https://www.youtube.com/@euronewshu/live' --cookies cookies.firefox-private.txt --js-runtimes deno:./deno --remote-components ejs:github >> youtube.m3u8 
       - name: d
         run: echo '#EXT-X-ENDLIST' >> youtube.m3u8
       - name: git add
